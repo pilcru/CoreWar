@@ -42,7 +42,7 @@ public class Tournoi {
 					if (verbose)
 						System.out
 								.print("Emplacement du fichier RedCode pour le joueur "
-										+ i + 1 + " ? : ");
+										+ (i + 1) + " ? : ");
 					try {
 						// Un joueur est créé à partir du fichier indiqué dans la console.
 						joueurs.add(i, Interpret.interpret(scanner.nextLine()));

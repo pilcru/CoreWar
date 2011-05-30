@@ -53,10 +53,21 @@ public final class Interpret {
 				}
 
 				else {
-					// il y a une étiquette et on ajoutera une ligne
-					String label = lineScanner.next();
-					labels.put(label, i);
-					i++;
+					String label;
+					try {
+						label = lineScanner.next();
+						labels.put(label, i);
+						i++;
+					} catch (NoSuchElementException e) {
+						if (line.matches("[ \t\n\f\r]")) {
+							// il y a des lignes vides à la fin du fichier
+						} else {
+							System.err
+							.println("cette ligne ne contient pas les éléments nécessaires : "
+									+ line);
+						}
+						return null;
+					}
 				}
 			}
 
@@ -102,6 +113,14 @@ public final class Interpret {
 					labels.put(label, i);
 					i++;
 				} catch (NoSuchElementException e) {
+					if (line.matches("[ \t\n\f\r]")) {
+						// il y a des lignes vides à la fin du fichier
+					} else {
+						System.err
+						.println("cette ligne ne contient pas les éléments nécessaires : "
+								+ line);
+					}
+					return null;
 				}
 			}
 		}
@@ -146,7 +165,7 @@ public final class Interpret {
 			scanner.close();
 
 		} catch (FileNotFoundException f) {
-			System.err.println("Impossible d'ouvrir ce fichier");
+			System.err.println("Impossible d'ouvrir ce fichier" + fileName);
 			throw f;
 		}
 

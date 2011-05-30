@@ -165,7 +165,7 @@ public final class Interpret {
 			scanner.close();
 
 		} catch (FileNotFoundException f) {
-			System.err.println("Impossible d'ouvrir ce fichier" + fileName);
+			System.err.println("Impossible d'ouvrir ce fichier : " + fileName);
 			throw f;
 		}
 

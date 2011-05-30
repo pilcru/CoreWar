@@ -40,11 +40,15 @@ public final class Interpret {
 				String line = scanner.nextLine();
 				Scanner lineScanner = new Scanner(line);
 
+//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//					scanner.next();
+//				}
+				
 				if (line.startsWith(";")) {
 					// c'est un commentaire, donc rien à faire et i ne change
 					// pas
 				}
-
+				
 				else if (lineScanner.hasNext(Pattern
 						.compile(instructionPattern))) {
 					// il n'y a pas d'étiquette, mais on ajoutera quand même une
@@ -98,6 +102,10 @@ public final class Interpret {
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			Scanner lineScanner = new Scanner(line);
+
+//			while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//				scanner.next();
+//			}
 
 			if (line.startsWith(";")) {
 			}
@@ -222,11 +230,19 @@ public final class Interpret {
 
 			Operation o = new Operation();
 
+//			while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//				scanner.next();
+//			}
+
 			try {
 				if (!scanner.hasNext(Pattern.compile(instructionPattern))) {
 					// il y a une étiquette, on la saute, l'instruction viendra
 					// après
 					scanner.next();
+
+//					while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//						scanner.next();
+//					}
 				}
 
 				// on récpère l'instruction
@@ -257,6 +273,10 @@ public final class Interpret {
 					System.out
 							.println("Instruction invalide : \"" + ins + "\"");
 				}
+				
+//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//					scanner.next();
+//				}
 
 				// -----------------------------
 				// I) Récupération de l'opérande A
@@ -278,11 +298,15 @@ public final class Interpret {
 				else {
 					o.OA.m = "_";
 				}
+				
+//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//					scanner.next();
+//				}
 
 				// 2) récupération de l'adresse de l'opérande A
 				// on veut récupérer l'adresse toute seule même si elle est
 				// collée à une ","
-				scanner.useDelimiter(",|[ \t\n\f\r]");
+				scanner.useDelimiter(",|[ \t]");
 				if (!scanner.hasNextInt()) {
 					// c'est une etiquette
 					String label = scanner.next();
@@ -297,7 +321,11 @@ public final class Interpret {
 				}
 
 				// on revient en mode normal
-				scanner.reset();
+				scanner.useDelimiter("[ \t]");
+
+//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//					scanner.next();
+//				}
 
 				// ---------------------------------
 				// II) Récupération de l'opérande B
@@ -322,6 +350,10 @@ public final class Interpret {
 						o.OB.m = "_";
 					}
 
+//					while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
+//						scanner.next();
+//					}
+
 					// 2) récupération de l'adresse de l'opérande B
 					if (!scanner.hasNextInt()) {
 						// c'est une étiquette
@@ -339,7 +371,7 @@ public final class Interpret {
 				return o;
 
 			} catch (NoSuchElementException e) {
-				if (line.matches("[ \t\n\f\r]")) {
+				if (line.matches("[ \t\n\f\r]+")) {
 					// il y a des lignes vides à la fin du fichier
 				} else {
 					System.err

@@ -28,7 +28,7 @@ public final class Interpret {
 	private static HashMap<String, Integer> getLabels(String fileName)
 			throws FileNotFoundException {
 
-		String instructionPattern = "DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+		String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
 		int i = 0; // permet de compter la position absolue dans le fichier,
 					// commentaires non compris.
 		HashMap<String, Integer> labels = new HashMap<String, Integer>();
@@ -37,12 +37,8 @@ public final class Interpret {
 			Scanner scanner = new Scanner(new FileReader(fileName));
 
 			while (scanner.hasNextLine()) { // on va donc lire ligne par ligne
-				String line = scanner.nextLine();
+				String line = formatSpaces(scanner.nextLine());
 				Scanner lineScanner = new Scanner(line);
-
-//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//					scanner.next();
-//				}
 				
 				if (line.startsWith(";")) {
 					// c'est un commentaire, donc rien à faire et i ne change
@@ -63,14 +59,13 @@ public final class Interpret {
 						labels.put(label, i);
 						i++;
 					} catch (NoSuchElementException e) {
-						if (line.matches("[ \t\n\f\r]")) {
+						if (line.matches("[ \t\n\f\r]+")||line.equals("")) {
 							// il y a des lignes vides à la fin du fichier
 						} else {
 							System.err
 							.println("cette ligne ne contient pas les éléments nécessaires : "
 									+ line);
 						}
-						return null;
 					}
 				}
 			}
@@ -94,18 +89,14 @@ public final class Interpret {
 	 */
 	private static HashMap<String, Integer> getLabels(String in, boolean b) {
 
-		String instructionPattern = "DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+		String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
 		int i = 0;
 		HashMap<String, Integer> labels = new HashMap<String, Integer>();
 		Scanner scanner = new Scanner(in);
 
 		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
+			String line = formatSpaces(scanner.nextLine());
 			Scanner lineScanner = new Scanner(line);
-
-//			while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//				scanner.next();
-//			}
 
 			if (line.startsWith(";")) {
 			}
@@ -121,14 +112,13 @@ public final class Interpret {
 					labels.put(label, i);
 					i++;
 				} catch (NoSuchElementException e) {
-					if (line.matches("[ \t\n\f\r]")) {
+					if (line.matches("[ \t\n\f\r]+")||line.equals("")) {
 						// il y a des lignes vides à la fin du fichier
 					} else {
 						System.err
 						.println("cette ligne ne contient pas les éléments nécessaires : "
 								+ line);
 					}
-					return null;
 				}
 			}
 		}
@@ -159,7 +149,7 @@ public final class Interpret {
 			Scanner scanner = new Scanner(new FileReader(fileName));
 
 			while (scanner.hasNextLine()) {
-				Operation o = processLine(scanner.nextLine(), labels, i); // appel
+				Operation o = processLine(formatSpaces(scanner.nextLine()), labels, i); // appel
 																			// de
 																			// l'interprète
 																			// à
@@ -196,13 +186,12 @@ public final class Interpret {
 		Scanner scanner = new Scanner(in);
 
 		while (scanner.hasNextLine()) {
-			Operation o = processLine(scanner.nextLine(), labels, i);
+			Operation o = processLine(formatSpaces(scanner.nextLine()), labels, i);
 			if (o != null) {
 				list.add(o);
 				i++;
 			}
 		}
-		scanner.close();
 		return list;
 	}
 
@@ -225,58 +214,46 @@ public final class Interpret {
 
 		else {
 			Scanner scanner = new Scanner(line);
-			String instructionPattern = "DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+			String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
 			String modePattern = "#|@|<";
 
 			Operation o = new Operation();
-
-//			while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//				scanner.next();
-//			}
 
 			try {
 				if (!scanner.hasNext(Pattern.compile(instructionPattern))) {
 					// il y a une étiquette, on la saute, l'instruction viendra
 					// après
 					scanner.next();
-
-//					while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//						scanner.next();
-//					}
 				}
 
 				// on récpère l'instruction
 				String ins = scanner.next();
-				if (ins.equals("DAT")) {
+				if (ins.equals("DAT") || ins.equals("dat")) {
 					o.ins = Instruction.DAT;
-				} else if (ins.equals("MOV")) {
+				} else if (ins.equals("MOV") || ins.equals("mov")) {
 					o.ins = Instruction.MOV;
-				} else if (ins.equals("ADD")) {
+				} else if (ins.equals("ADD") || ins.equals("add")) {
 					o.ins = Instruction.ADD;
-				} else if (ins.equals("SUB")) {
+				} else if (ins.equals("SUB") || ins.equals("sub")) {
 					o.ins = Instruction.SUB;
-				} else if (ins.equals("JMP")) {
+				} else if (ins.equals("JMP") || ins.equals("jmp")) {
 					o.ins = Instruction.JMP;
-				} else if (ins.equals("JMZ")) {
+				} else if (ins.equals("JMZ") || ins.equals("jmz")) {
 					o.ins = Instruction.JMZ;
-				} else if (ins.equals("JMN")) {
+				} else if (ins.equals("JMN") || ins.equals("jmn")) {
 					o.ins = Instruction.JMN;
-				} else if (ins.equals("CMP")) {
+				} else if (ins.equals("CMP") || ins.equals("cmp")) {
 					o.ins = Instruction.CMP;
-				} else if (ins.equals("SLT")) {
+				} else if (ins.equals("SLT") || ins.equals("slt")) {
 					o.ins = Instruction.SLT;
-				} else if (ins.equals("DJN")) {
+				} else if (ins.equals("DJN") || ins.equals("djn")) {
 					o.ins = Instruction.DJN;
-				} else if (ins.equals("SPL")) {
+				} else if (ins.equals("SPL") || ins.equals("spl")) {
 					o.ins = Instruction.SPL;
 				} else {
 					System.out
 							.println("Instruction invalide : \"" + ins + "\"");
 				}
-				
-//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//					scanner.next();
-//				}
 
 				// -----------------------------
 				// I) Récupération de l'opérande A
@@ -298,10 +275,6 @@ public final class Interpret {
 				else {
 					o.OA.m = "_";
 				}
-				
-//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//					scanner.next();
-//				}
 
 				// 2) récupération de l'adresse de l'opérande A
 				// on veut récupérer l'adresse toute seule même si elle est
@@ -322,10 +295,6 @@ public final class Interpret {
 
 				// on revient en mode normal
 				scanner.useDelimiter("[ \t]");
-
-//				while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//					scanner.next();
-//				}
 
 				// ---------------------------------
 				// II) Récupération de l'opérande B
@@ -350,10 +319,6 @@ public final class Interpret {
 						o.OB.m = "_";
 					}
 
-//					while (" ".equals(scanner.findWithinHorizon(" ", 1))) { // on saute les espaces surnuméraires
-//						scanner.next();
-//					}
-
 					// 2) récupération de l'adresse de l'opérande B
 					if (!scanner.hasNextInt()) {
 						// c'est une étiquette
@@ -371,7 +336,7 @@ public final class Interpret {
 				return o;
 
 			} catch (NoSuchElementException e) {
-				if (line.matches("[ \t\n\f\r]+")) {
+				if (line.matches("[ \t\n\f\r]+")||line.equals("")) {
 					// il y a des lignes vides à la fin du fichier
 				} else {
 					System.err
@@ -381,5 +346,16 @@ public final class Interpret {
 				return null;
 			}
 		}
+	}
+	
+	/**
+	 * Remplace les espaces multiples par un seul et supprime les espaces de début et fin de ligne
+	 * @param line la ligne à traiter
+	 * @return la chaine de caractères formatée.
+	 */
+	private static String formatSpaces(String line) {
+		String formatted = line.trim();
+		formatted.replaceAll("[ \t]+", " ");
+		return formatted;
 	}
 }

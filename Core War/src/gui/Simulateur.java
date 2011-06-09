@@ -100,6 +100,16 @@ public class Simulateur implements Runnable {
 			}
 			if (cpt > 0) {
 				for (int i = 0; i < 800; i++) {
+					if (affm.archive.nextElement().couleur[i].equals(Color.green) && getProcess(1) != null) {
+						if (!getProcess(1).contains(new Adresse(i))) {
+							affm.tab[i].setBackground(Color.white);
+						}
+					}
+					if (affm.archive.nextElement().couleur[i].equals(Color.blue) && getProcess(2) != null) {
+						if (!getProcess(2).contains(new Adresse(i))) {
+							affm.tab[i].setBackground(Color.white);
+						}
+					}
 					if (!mem.O[i].equals(affm.archive.nextElement().mem.O[i])) {
 						if (starter == 1)
 							affm.tab[i].setBackground(Color.cyan);

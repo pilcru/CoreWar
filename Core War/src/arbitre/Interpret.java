@@ -28,7 +28,7 @@ public final class Interpret {
 	private static HashMap<String, Integer> getLabels(String fileName)
 			throws FileNotFoundException {
 
-		String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+		String instructionPattern = "(?i)(DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL)";
 		int i = 0; // permet de compter la position absolue dans le fichier,
 					// commentaires non compris.
 		HashMap<String, Integer> labels = new HashMap<String, Integer>();
@@ -89,7 +89,7 @@ public final class Interpret {
 	 */
 	private static HashMap<String, Integer> getLabels(String in, boolean b) {
 
-		String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+		String instructionPattern = "(?i)(DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL)";
 		int i = 0;
 		HashMap<String, Integer> labels = new HashMap<String, Integer>();
 		Scanner scanner = new Scanner(in);
@@ -214,7 +214,7 @@ public final class Interpret {
 
 		else {
 			Scanner scanner = new Scanner(line);
-			String instructionPattern = "(?i) DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL";
+			String instructionPattern = "(?i)(DAT|MOV|ADD|SUB|JMP|JMZ|JMN|CMP|SLT|DJN|SPL)";
 			String modePattern = "#|@|<";
 
 			Operation o = new Operation();
@@ -355,7 +355,8 @@ public final class Interpret {
 	 */
 	private static String formatSpaces(String line) {
 		String formatted = line.trim();
-		formatted.replaceAll("[ \t]+", " ");
+		formatted = formatted.replaceAll("[ \t]+", " ");
+		formatted = formatted.replaceAll("[ \t]+,", ",");
 		return formatted;
 	}
 }

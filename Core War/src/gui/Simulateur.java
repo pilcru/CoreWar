@@ -99,17 +99,27 @@ public class Simulateur implements Runnable {
 				starter = 1;
 			}
 			if (cpt > 0) {
+				if ((starter == 2 && j1 != null) || j2 == null) {
+					for (int i = 0; i < 800; i++) {
+						if (affm.archive.nextElement().couleur[i]
+								.equals(Color.green) && getProcess(1) != null) {
+							if (!getProcess(1).contains(new Adresse(i))) {
+								affm.tab[i].setBackground(Color.white);
+							}
+						}
+					}
+				}
+				if (starter == 1 && j2 != null) {
+					for (int i = 0; i < 800; i++) {
+						if (affm.archive.nextElement().couleur[i]
+								.equals(Color.blue) && getProcess(2) != null) {
+							if (!getProcess(2).contains(new Adresse(i))) {
+								affm.tab[i].setBackground(Color.white);
+							}
+						}
+					}
+				}
 				for (int i = 0; i < 800; i++) {
-					if (affm.archive.nextElement().couleur[i].equals(Color.green) && getProcess(1) != null) {
-						if (!getProcess(1).contains(new Adresse(i))) {
-							affm.tab[i].setBackground(Color.white);
-						}
-					}
-					if (affm.archive.nextElement().couleur[i].equals(Color.blue) && getProcess(2) != null) {
-						if (!getProcess(2).contains(new Adresse(i))) {
-							affm.tab[i].setBackground(Color.white);
-						}
-					}
 					if (!mem.O[i].equals(affm.archive.nextElement().mem.O[i])) {
 						if (starter == 1)
 							affm.tab[i].setBackground(Color.cyan);
@@ -211,7 +221,7 @@ public class Simulateur implements Runnable {
 
 		if (j1 != null && j1.processus != null && j1.processus.isEmpty()
 				&& running) {
-//			JOptionPane.showMessageDialog(null, "Joueur 2 a gagné.");
+			// JOptionPane.showMessageDialog(null, "Joueur 2 a gagné.");
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -225,7 +235,7 @@ public class Simulateur implements Runnable {
 
 		else if (j2 != null && j2.processus != null && j2 != null
 				&& j2.processus.isEmpty() && running) {
-			//			JOptionPane.showMessageDialog(null, "Joueur 1 a gagné.");
+			// JOptionPane.showMessageDialog(null, "Joueur 1 a gagné.");
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -238,7 +248,7 @@ public class Simulateur implements Runnable {
 		}
 
 		else if (running) {
-//			JOptionPane.showMessageDialog(null, "Egalité.");
+			// JOptionPane.showMessageDialog(null, "Egalité.");
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
